@@ -1,4 +1,4 @@
-#include "Library/lex.hpp"
+#include "lib/lex.hpp"
 
 void save_lex_resul_to_file(const std::string &path, const std::vector<std::pair<lex::types, std::string>> &result)
 {
