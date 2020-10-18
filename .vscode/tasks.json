@@ -6,6 +6,7 @@
             "command": "/usr/bin/g++",
             "args": [
                 "-g",
+                "${fileDirname}/lib/lex.cpp",
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
