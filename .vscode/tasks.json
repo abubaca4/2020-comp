@@ -9,7 +9,7 @@
                 "${fileDirname}/lib/*.cpp",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}.out"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
