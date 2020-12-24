@@ -32,6 +32,7 @@ void lex::load_special(const std::string &path, lex::types type_of_s)
             non_id_chars.insert(i);
         }
         symb[temp] = type_of_s;
+        symb_len.insert(temp.length());
     }
     file.close();
 }
@@ -88,6 +89,15 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
             break;
 
         case symbols:
+            if (symb_len.count(lex_m.length()))
+            {
+                if (symb.find(lex_m) != symb.end())
+                {
+                    result.push_back({symb[lex_m], lex_m});
+                    lex_m = "";
+                    continue;
+                }
+            }
             if (non_id_chars.count(temp))
             {
                 lex_m += temp;
@@ -96,6 +106,8 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
             else
             {
                 state = start;
+                if (lex_m.length() == 0)
+                    continue;
                 if (symb.find(lex_m) != symb.end())
                 {
                     result.push_back({symb[lex_m], lex_m});

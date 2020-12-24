@@ -27,6 +27,7 @@ private:
     std::set<char> non_id_chars;
     std::set<std::string> kwords;
     std::map<std::string, types> symb;
+    std::set<int> symb_len;
 
 public:
     static const char *lex_types_text(types number);
