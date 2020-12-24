@@ -1,4 +1,6 @@
 #include "lib/lex.hpp"
+#include "lib/grammar_parser.hpp"
+#include "lib/first_follow.hpp"
 
 void save_lex_resul_to_file(const std::string &path, const std::vector<lex_record> &result)
 {
@@ -30,4 +32,6 @@ int main()
     test_lex.load_special("unary_operator.txt", lex_types::unary_operator);
     auto result = test_lex.parse_file("test_example.txt");
     save_lex_resul_to_file("result.csv", result);
+    auto grammar = parse_grammar_file("grammar_rules.txt");
+    auto first_follow_sets = first_follow(grammar);
 }

@@ -3,23 +3,23 @@
 const char *lex::lex_types_text(lex_types number)
 {
     static const std::map<lex_types, std::string> text_types{{equal, "equal"},
-                                                         {delimeter, "delimeter"},
-                                                         {relative_operators, "relative_operators"},
-                                                         {keywords, "keywords"},
-                                                         {ids, "ids"},
-                                                         {broken_sequence, "broken_sequence"},
-                                                         {integer, "integer"},
-                                                         {real, "real"},
-                                                         {open_bracket, "open_bracket"},
-                                                         {close_bracket, "close_bracket"},
-                                                         {or_op, "or_op"},
-                                                         {and_op, "and_op"},
-                                                         {pm_operator, "pm_operator"},
-                                                         {md_operator, "md_operator"},
-                                                         {open_par, "open_par"},
-                                                         {close_par, "close_par"},
-                                                         {prefix_operator, "prefix_operator"},
-                                                         {unary_operator, "unary_operator"}};
+                                                             {delimeter, "delimeter"},
+                                                             {relative_operators, "relative_operators"},
+                                                             {keywords, "keywords"},
+                                                             {ids, "ids"},
+                                                             {broken_sequence, "broken_sequence"},
+                                                             {integer, "integer"},
+                                                             {real, "real"},
+                                                             {open_bracket, "open_bracket"},
+                                                             {close_bracket, "close_bracket"},
+                                                             {or_op, "or_op"},
+                                                             {and_op, "and_op"},
+                                                             {pm_operator, "pm_operator"},
+                                                             {md_operator, "md_operator"},
+                                                             {open_par, "open_par"},
+                                                             {close_par, "close_par"},
+                                                             {prefix_operator, "prefix_operator"},
+                                                             {unary_operator, "unary_operator"}};
     if (text_types.find(number) != text_types.end())
     {
         return text_types.find(number)->second.c_str();
