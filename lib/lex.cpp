@@ -99,7 +99,7 @@ std::vector<lex_record> lex::parse_file(const std::string &path)
             break;
 
         case symbols:
-            if (symb_len.count(lex_m.length()))
+            /*if (symb_len.count(lex_m.length()))
             {
                 if (symb.find(lex_m) != symb.end())
                 {
@@ -107,7 +107,7 @@ std::vector<lex_record> lex::parse_file(const std::string &path)
                     lex_m = "";
                     continue;
                 }
-            }
+            }*/
             if (non_id_chars.count(temp))
             {
                 lex_m += temp;
@@ -155,6 +155,7 @@ std::vector<lex_record> lex::parse_file(const std::string &path)
     file.close();
     for (auto &i : result)
     {
+        i.symbol -= i.text.length();
         if (i.type == ids)
         {
             try

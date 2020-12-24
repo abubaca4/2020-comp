@@ -6,7 +6,7 @@ void save_lex_resul_to_file(const std::string &path, const std::vector<lex_recor
     file << "\"№\",\"type\",\"text\",\"line\",\"symbol\"" << std::endl;
     for (size_t i = 0; i < result.size(); i++)
     {
-        file << "\"" << i << "\",\"" << lex::lex_types_text(result[i].type) << "\",\"" << result[i].text << "\",\"" << result[i].line + 1 << "\",\"" << result[i].symbol << "\"" << std::endl;
+        file << "\"" << i << "\",\"" << lex::lex_types_text(result[i].type) << "\",\"" << result[i].text << "\",\"" << result[i].line + 1 << "\",\"" << result[i].symbol + 1 << "\"" << std::endl;
     }
     file.close();
 }
