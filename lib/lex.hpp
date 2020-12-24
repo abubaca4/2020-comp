@@ -6,34 +6,22 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "lex_type.h"
 
 class lex
 {
-public:
-    enum types
-    {
-        equal,
-        delimeter,
-        relative_operators,
-        keywords,
-        ids,
-        broken_sequence,
-        integer,
-        real
-    };
-
 private:
     std::set<char> separator{' ', '\n'};
     std::set<char> non_id_chars;
     std::set<std::string> kwords;
-    std::map<std::string, types> symb;
+    std::map<std::string, lex_types> symb;
     std::set<int> symb_len;
 
 public:
-    static const char *lex_types_text(types number);
-    void load_special(const std::string &path, types type_of_s);
+    static const char *lex_types_text(lex_types number);
+    void load_special(const std::string &path, lex_types type_of_s);
     void load_kwords(const std::string &path);
-    std::vector<std::pair<types, std::string>> parse_file(const std::string &path);
+    std::vector<lex_record> parse_file(const std::string &path);
 };
 
 #endif

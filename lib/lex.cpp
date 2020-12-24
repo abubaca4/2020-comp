@@ -1,8 +1,8 @@
 #include "lex.hpp"
 
-const char *lex::lex_types_text(lex::types number)
+const char *lex::lex_types_text(lex_types number)
 {
-    static const std::map<types, std::string> text_types{{equal, "equal"},
+    static const std::map<lex_types, std::string> text_types{{equal, "equal"},
                                                          {delimeter, "delimeter"},
                                                          {relative_operators, "relative_operators"},
                                                          {keywords, "keywords"},
@@ -20,7 +20,7 @@ const char *lex::lex_types_text(lex::types number)
     }
 }
 
-void lex::load_special(const std::string &path, lex::types type_of_s)
+void lex::load_special(const std::string &path, lex_types type_of_s)
 {
     std::ifstream file(path);
     while (!file.eof())
@@ -49,9 +49,9 @@ void lex::load_kwords(const std::string &path)
     file.close();
 }
 
-std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::string &path)
+std::vector<lex_record> lex::parse_file(const std::string &path)
 {
-    std::vector<std::pair<types, std::string>> result;
+    std::vector<lex_record> result;
     std::ifstream file(path);
 
     enum states
@@ -64,6 +64,7 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
     char temp;
     std::string lex_m{""};
     states state = start;
+    size_t line = 0, symbol = 0;
     file.get(temp);
     do
     {
@@ -84,6 +85,15 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
             }
             else
             {
+                if (temp == '\n')
+                {
+                    symbol = 0;
+                    line++;
+                }
+                else
+                {
+                    symbol++;
+                }
                 file.get(temp);
             }
             break;
@@ -93,7 +103,7 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
             {
                 if (symb.find(lex_m) != symb.end())
                 {
-                    result.push_back({symb[lex_m], lex_m});
+                    result.push_back({.type = symb[lex_m], .text = lex_m, .line = line, .symbol = symbol});
                     lex_m = "";
                     continue;
                 }
@@ -102,6 +112,7 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
             {
                 lex_m += temp;
                 file.get(temp);
+                symbol++;
             }
             else
             {
@@ -110,11 +121,11 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
                     continue;
                 if (symb.find(lex_m) != symb.end())
                 {
-                    result.push_back({symb[lex_m], lex_m});
+                    result.push_back({.type = symb[lex_m], .text = lex_m, .line = line, .symbol = symbol});
                 }
                 else
                 {
-                    result.push_back({broken_sequence, lex_m});
+                    result.push_back({.type = broken_sequence, .text = lex_m, .line = line, .symbol = symbol});
                 }
             }
             break;
@@ -124,17 +135,18 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
             {
                 lex_m += temp;
                 file.get(temp);
+                symbol++;
             }
             else
             {
                 state = start;
                 if (kwords.count(lex_m))
                 {
-                    result.push_back({keywords, lex_m});
+                    result.push_back({.type = keywords, .text = lex_m, .line = line, .symbol = symbol});
                 }
                 else
                 {
-                    result.push_back({ids, lex_m});
+                    result.push_back({.type = ids, .text = lex_m, .line = line, .symbol = symbol});
                 }
             }
             break;
@@ -143,30 +155,30 @@ std::vector<std::pair<lex::types, std::string>> lex::parse_file(const std::strin
     file.close();
     for (auto &i : result)
     {
-        if (i.first == ids)
+        if (i.type == ids)
         {
             try
             {
-                std::stoi(i.second);
-                i.first = integer;
+                std::stoi(i.text);
+                i.type = integer;
             }
             catch (std::invalid_argument)
             {
                 try
                 {
-                    std::stof(i.second);
-                    i.first = real;
+                    std::stof(i.text);
+                    i.type = real;
                 }
                 catch (std::invalid_argument)
                 {
                 }
             }
-            if (i.first == integer && i.second.find('.') != std::string::npos)
+            if (i.type == integer && i.text.find('.') != std::string::npos)
             {
                 try
                 {
-                    std::stof(i.second);
-                    i.first = real;
+                    std::stof(i.text);
+                    i.type = real;
                 }
                 catch (std::invalid_argument)
                 {
