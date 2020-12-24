@@ -21,7 +21,8 @@ enum lex_types
     open_par,
     close_par,
     prefix_operator,
-    unary_operator
+    unary_operator,
+    eof
 };
 
 struct lex_record
